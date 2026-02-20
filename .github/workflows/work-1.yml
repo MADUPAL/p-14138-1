@@ -45,7 +45,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: set lower case owner name
-        run:
+        run: |
           echo "OWNER_LC=${OWNER,,}" >> ${GITHUB_ENV}
         env:
           OWNER: '${{ github.repository_owner }}'
@@ -54,8 +54,9 @@ jobs:
         with:
           context: .
           push: true
-          tags:
+          tags: |
             ghcr.io/${{ env.OWNER_LC }}/p-14138-1:${{ needs.makeTagAndRelease.outputs.tag_name }}
             ghcr.io/${{ env.OWNER_LC }}/p-14138-1:latest
+          # 💡 팁: GitHub Actions 전용 캐시를 사용하여 빌드 속도를 비약적으로 높입니다.
           cache-from: type=gha
           cache-to: type=gha,mode=max
